@@ -23,6 +23,12 @@ const routes = [
     path:"/Pan",
     name:"Pan",
     component:Pan
+  },
+  {
+    //注意这个路径
+    path:"/Pan/new",
+    name:"new",
+    component:() => import("../views/new.vue")
   }
 
 ];

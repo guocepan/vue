@@ -1,6 +1,7 @@
 <template>
   <div id="app">
     <div id="nav">
+      <!-- 这几个厉害，这就是网页上方那个快捷按钮的地方，点击就能前往想要去的地方 -->
       <router-link to="/">Home</router-link> |
       <router-link to="/about">About</router-link>|
       <router-link to="/Pan">pan</router-link>
