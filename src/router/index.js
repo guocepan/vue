@@ -6,9 +6,9 @@ Vue.use(VueRouter);
 
 const routes = [
   {
+    // 这里说的是，当进入根目录就会跳到about这个界面，about是下面path的路径
     path: "/",
-    name: "Home",
-    component: Home
+    redirect:"/Pan/new"
   },
   {
     path: "/about",

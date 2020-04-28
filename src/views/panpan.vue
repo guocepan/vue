@@ -11,7 +11,8 @@
 <script>
 // 脚本要export出去，才能被主体看见
 export default {
-    
+
+   
 }
 </script>
 
