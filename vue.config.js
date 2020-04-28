@@ -44,6 +44,7 @@ module.exports = {
     // css预设器配置项
     loaderOptions: {
       scss: {
+        // 这个是css主文件的入口
         prependData: `@import  "./src/styles/main.scss";`,
         prependData: `@import  "./src/styles/normalize.scss";`
 
