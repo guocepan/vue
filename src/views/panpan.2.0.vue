@@ -69,7 +69,6 @@
             <!-- 按钮是内行元素，需要转成块元素，让他铺满整行。 -->
             <el-col :span="9">
               <el-button type="danger" size="medium" class="block"
-              @click="getSms()"
                 >发送验证码</el-button
               ></el-col
             >
@@ -96,49 +95,51 @@
 
 <script>
 // 引入在别的文件定义的方法
-// import service from "@/utiles/request.js"  //用export default 出来的单个的就不用花括号
-import { stripscript ,valieNumLen,valeUsr,valiecode} from "@/utiles/validate.js"; //这个没有默认export出来
-import {GetSms} from "@/api/panpan.js"
-import {reactive,ref, onMounted} from  "@vue/composition-api"
+import { stripscript ,valieNumLen,valeUsr,valiecode} from "@/utiles/validate.js";
+
 // 脚本要export出去，才能被主体看见
 export default {
   name: "login",
-  setup(props,context){
+  data() {
+    
 
-  // 验证邮箱
-  let validateUser = (rule, value, callback) => {
-  // 验证邮箱的正则表达式
-  // let reg = /^([a-zA-Z]|[0-9])(\w|\-)+@[a-zA-Z0-9]+\.([a-zA-Z]{2,4})$/;
-  if (value === "") {
-      callback(new Error("请输入邮箱"));
-  } else if (valeUsr(value)) {
-      callback(new Error("输入的邮箱格式有误"));
-  } else {
-  callback();
-  }
-  };
-let validatePass = (rule, value, callback) => {
-    //这个地方要验证的是密码。那么进来的就是改掉密码中不和规范的。
-    //  ?!\D 非0-9   +至少一个   ?![^a-zA-Z] 非字母 + 至少一个 \S 非空字符 {6,20} 6-20位  总的说就是有字母和数字
-    //过滤掉密码中不该有的字符，既然是要过滤掉，那么必定是要传回数据的。
-    ruleForm.checkPass = stripscript(value);
-    value = ruleForm.checkPass; //这个是处理完后的，拿回来才有用。
-    // console.log(stripscript(value));
-    // let reg = /^(?!\D+$)(?![^a-zA-Z]+$)\S{6,20}$/;
-    if (value === "") {
-      callback(new Error("请输入密码"));
-    } else if (valieNumLen(value)) {
-      callback(new Error("6-20"));
-    } else {
-      callback();
-    }
+    // 验证邮箱
+    var validateUser = (rule, value, callback) => {
+      
+      // 验证邮箱的正则表达式
+
+      let reg = /^([a-zA-Z]|[0-9])(\w|\-)+@[a-zA-Z0-9]+\.([a-zA-Z]{2,4})$/;
+      if (value === "") {
+        callback(new Error("请输入邮箱"));
+      } else if (valeUsr(value)) {
+        callback(new Error("输入的邮箱格式有误"));
+      } else {
+        
+        callback();
+      }
+    };
+    var validatePass = (rule, value, callback) => {
+      //这个地方要验证的是密码。那么进来的就是改掉密码中不和规范的。
+      //  ?!\D 非0-9   +至少一个   ?![^a-zA-Z] 非字母 + 至少一个 \S 非空字符 {6,20} 6-20位  总的说就是有字母和数字
+      //过滤掉密码中不该有的字符，既然是要过滤掉，那么必定是要传回数据的。
+      this.ruleForm.checkPass = stripscript(value);
+      value = this.ruleForm.checkPass; //这个是处理完后的，拿回来才有用。
+      // console.log(stripscript(value));
+      // let reg = /^(?!\D+$)(?![^a-zA-Z]+$)\S{6,20}$/;
+      if (value === "") {
+        callback(new Error("请输入密码"));
+      } else if (valieNumLen(value)) {
+        callback(new Error("6-20"));
+      } else {
+        callback();
+      }
     }; 
 
 
 //重复密码
-    let validatePassS = (rule, value, callback) => {
+    var validatePassS = (rule, value, callback) => {
       //v-show 处理
-      if(mode.value == 'login')
+      if(this.mode == 'login')
       {
         callback(); //如果是login模式，直接通过。
       }
@@ -146,13 +147,13 @@ let validatePass = (rule, value, callback) => {
       //这个地方要验证的是密码。那么进来的就是改掉密码中不和规范的。
       //  ?!\D 非0-9   +至少一个   ?![^a-zA-Z] 非字母 + 至少一个 \S 非空字符 {6,20} 6-20位  总的说就是有字母和数字
       //过滤掉密码中不该有的字符，既然是要过滤掉，那么必定是要传回数据的。
-      ruleForm.checkPassS = stripscript(value);
-      value = ruleForm.checkPassS; //这个是处理完后的，拿回来才有用。
+      this.ruleForm.checkPassS = stripscript(value);
+      value = this.ruleForm.checkPassS; //这个是处理完后的，拿回来才有用。
       // console.log(stripscript(value));
       // let reg = /^(?!\D+$)(?![^a-zA-Z]+$)\S{6,20}$/;
       if (value === "") {
         callback(new Error("请重复密码"));
-      } else if (value != ruleForm.checkPass ) { 
+      } else if (value != this.ruleForm.checkPass ) { 
         callback(new Error("两次密码不一致"));
       } else {
         callback();
@@ -160,11 +161,23 @@ let validatePass = (rule, value, callback) => {
       
     };
 
-    
+    // const axios = require("axios");
 
-    
-   
-      let checkCode = (rule, value, callback) => {
+    // // Make a request for a user with a given ID
+    // axios
+    //   .get("/user?ID=12345")
+    //   .then(function(response) {
+    //     // handle success
+    //     console.log(response);
+    //   })
+    //   .catch(function(error) {
+    //     // handle error
+    //     console.log(error);
+    //   })
+    //   .then(function() {
+    //     // always executed
+    //   });
+      var checkCode = (rule, value, callback) => {
       // 验证邮箱，那么value传进来的就是邮箱的值
       // 也就是说，这个value传进来的就是data里面的值。直接改掉的方法为
       
@@ -187,118 +200,81 @@ let validatePass = (rule, value, callback) => {
       //   }
       // }, 1000);
     };
-
-     //获取验证码
-     let getSms = (()=>{
-       let data ={
-         username:ruleForm.user
-       }
-       GetSms(data)
-     }
-     )
-
-
-
-
-
-
-
-
-
-
-    const menuTab = reactive(
-      [
+    //所有的绑定的东西都在ruturn 里面
+    return {
+      menuTab: [
         { content: "登陆", active: true, type:'login' },
         { content: "注册", active: false, type:'register' }
-      ]) 
-  const mode=ref('login')
-  console.log(mode.value)
+      ],
+      mode:'login',
 
-  const changeCurrent = ((e) => {
-        //传进来的是即将要改变的变量
-        menuTab.forEach(element => {
-          //this 这个是将本对象中的属性全都改为false。   es6 的写法
-        element.active = false;
-          //   console.log(element);   //这个打印的是最终的形态，  有两个元素，就循环4次，并把最后一次完整的循环打印到log上去
-        });
-        /*/这个是es5的写法
-        for(let i = 0; i < this.menuTab.length;i++)
-        {
-          this.menuTab[i].active = false;
-        }
-        */
-        e.active = true; //这个e是传进来的即将要改变的元素
-
-        // if(e.type == 'register')
-        // {
-        //   alert(e.type);
-        //   this.mode = 'register';
-        // }else
-        // {
-        
-        //   alert(e.type);
-
-        //   this.mode = 'login';
-        // }
-        console.log(e);
-        //这个比上面的好，自动添加了
-        mode.value = e.type; //基本的数据要用点value才能取出来
-
-      })
-  const submitForm = ((formName)=> {
-
- 
-      
-
-
-
-
-    context.refs[formName].validate(valid => {
-      if (valid) {
-        alert("submit!");
-      } else {
-        console.log("error submit!!");
-        return false;
-      }
-    });
-  })
-  const resetForm = ((formName)=> {
-  context.refs[formName].resetFields();
-})
-const rules1 =reactive( {
-    user: [{ validator: validateUser, trigger: "blur" }],
-    checkPass: [{ validator: validatePass, trigger: "blur" }],
-    checkPassS: [{ validator: validatePassS, trigger: "blur" }],
-
-    code: [{ validator: checkCode, trigger: "blur" }]
-})
-const ruleForm = reactive(
-   {
-        user: "313391883@qq.com",
-        checkPass: "www222",
-        code: "222222",
-        checkPassS:"www222"
+      ruleForm: {
+        user: "313391@qq.com",
+        checkPass: "",
+        code: "",
+        checkPassS:""
       },
 
-)
+      rules1: {
+        user: [{ validator: validateUser, trigger: "blur" }],
+        checkPass: [{ validator: validatePass, trigger: "blur" }],
+        checkPassS: [{ validator: validatePassS, trigger: "blur" }],
 
-onMounted(()=>{
-  GetSms()
-})
+        code: [{ validator: checkCode, trigger: "blur" }]
+      }
+    };
+  },
+
+  methods: {
+    changeCurrent(e) {
+      //传进来的是即将要改变的变量
+      this.menuTab.forEach(element => {
+        //this 这个是将本对象中的属性全都改为false。   es6 的写法
+        element.active = false;
+        //   console.log(element);   //这个打印的是最终的形态，  有两个元素，就循环4次，并把最后一次完整的循环打印到log上去
+      });
+
+      /*    //这个是es5的写法
+            for(let i = 0; i < this.menuTab.length;i++)
+            {
+               this.menuTab[i].active = false;
+            }
+            */
+      e.active = true; //这个e是传进来的即将要改变的元素
 
 
-  return{
-    menuTab,
-    mode,
-    submitForm,
-    resetForm,
-    changeCurrent,
-    rules1,
-    ruleForm,
-    getSms
+      // if(e.type == 'register')
+      // {
+      //   alert(e.type);
+      //   this.mode = 'register';
+      // }else
+      // {
+       
+      //   alert(e.type);
+
+      //   this.mode = 'login';
+      // }
+      console.log(e);
+      //这个比上面的好，自动添加了
+      this.mode = e.type;
+
+    },
+    submitForm(formName) {
+      this.$refs[formName].validate(valid => {
+        if (valid) {
+          alert("submit!");
+        } else {
+          console.log("error submit!!");
+          return false;
+        }
+      });
+    },
+    resetForm(formName) {
+      this.$refs[formName].resetFields();
+    }
   }
-  }
 
+  //////////////////////////////////////////////////////////////
 };
 </script>
 

@@ -70,6 +70,24 @@ module.exports = {
     https: false, // 编译失败时刷新页面
     hot: true, // 开启热加载
     hotOnly: false,
+    /* 跨域问题
+    '/api': {
+
+            // 测试环境
+
+            target: 'http://localhost:888/',  // 接口域名
+
+            changeOrigin: true,  //是否跨域
+
+            pathRewrite: {
+
+              '^/api': ''  //需要rewrite重写的,
+
+            }
+
+        }
+
+        */
     proxy: {
       "/devApi": {
         target: "http://www.web-jshtml.cn/productapi/token", //API服务器的地址  http://www.web-jshtml.cn/api
