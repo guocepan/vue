@@ -18,9 +18,16 @@ service.interceptors.request.use(function (config) {
   return Promise.reject(error);
 });
 
-// 添加响应拦截器
+// 添加响应拦截器,这个是服务器已经返回的数据
 service.interceptors.response.use(function (response) {
   // 对响应数据做点什么
+  if(response.data.resCode !== 0)
+  {
+    alert("有问题")
+  }
+
+
+
   return response;
 }, function (error) {
   // 对响应错误做点什么
